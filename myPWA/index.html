@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>monkey</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+</head>
+<body>
+
+  <div class="tooltip" id="tooltip">Lock Sidebar Open (ctrl+s)</div>
+
+  <div class="sidebar-container" id="sidebarContainer">
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-content">
+        <div class="item" label="Lock Sidebar Open (ctrl+s)" id="sidebarlock">
+          <box-icon name="chevrons-right" animation="tada-hover" id="sidebarlockicon"></box-icon>
+        </div>
+        <div class="folders">
+          <div class="item sidebarBtn" data-tab="typeWriter" label="TypeWriter"><box-icon name="message"></box-icon><span>TypeWriter</span></div>
+          <div class="item sidebarBtn" data-tab="chapter" label="Unlocked after ???" id="chapterTab"><box-icon name="question-mark"></box-icon><span>???</span></div>
+          <div class="item sidebarBtn" data-tab="achievement" label="Unlocked after ???" id="achievementTab"><box-icon name="question-mark"></box-icon><span>???</span></div>
+          <div class="item sidebarBtn" data-tab="mastery" label="Unlocked after ???" id="masteryTab"><box-icon name="question-mark"></box-icon><span>???</span></div>
+          <div class="item sidebarBtn" label="Unlocked after ???"><box-icon name="question-mark"></box-icon><span>???</span></div>
+          <div class="item sidebarBtn" label="Unlocked after ???"><box-icon name="question-mark"></box-icon><span>???</span></div>
+          <div class="item sidebarBtn" label="Unlocked after ???"><box-icon name="question-mark"></box-icon><span>???</span></div>
+          <div class="item sidebarBtn" data-tab="collection" label="Unlocked after ???" id="collectionTab"><box-icon name="question-mark"></box-icon><span>???</span></div>
+          <div class="item sidebarBtn" data-tab="settings" label="Settings"><box-icon name="cog"></box-icon><span>Settings</span></div>
+          <div class="item sidebarBtn" data-tab="shop" label="Shop"><box-icon name="store-alt"></box-icon><span>Shop</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tabContent active typeWriter" id="typeWriter" style="display: block;">
+    <div id="key-float-container"></div>
+    <div class="keyboard" id="keyboard"></div>
+    <div id="currently-mastering"></div>
+    <div id="automonkeyinterval"></div>
+    <p>hi!</p>
+    <img src="monkey.webp" style="width: 20%;">
+  </div>
+
+  <div class="tabContent" id="chapter">
+    <p id="chapter-paragraph">The quick brown fox jumps over the lazy dog.</p>
+    <div id="chapter-overflow" style="margin: 10px; font-style: italic; color: #a00;"></div>
+  </div>
+
+  <div class="tabContent" id="achievement">
+    <div class="achievmentImages" id="achievementImages"></div>
+
+    <img src="monkey.webp" class="secretAchievementImage" onclick="activateSecretAchievements()">
+  </div>
+
+  <div class="tabContent" id="secretachievementlist">
+    Secret!!
+  </div>
+
+  <div class="tabContent" id="mastery">
+    <p>Mastery tab content</p>
+    <div id="mastery-list" class="masteryGrid"></div>
+  </div>
+
+  <div class="tabContent" id="collection">
+    <p>Your collections will appear here.</p>
+  </div>
+
+  <div class="tabContent" id="settings">
+    <p>Settings menu here.</p>
+  </div>
+
+  <div class="tabContent" id="shop">
+    <p>
+    Banana: 2x boost to automonkey speed! Cost: $50 USD
+    </p>
+    <span>
+    Hercules Chen: 50x boost to brainpower! Allows full control over monkey! Cost: Human organs.
+    </span>
+  </div>
+
+  <div id="popups" class="banner-container"></div>
+
+  <script src="js/main.js"></script>
+  <script src="js/sidebar.js"></script>
+  <script src="js/typing.js"></script>
+  <script src="js/keyboard.js"></script>
+  <script src="js/functions.js"></script>
+  <script src="js/mastery.js"></script>
+  <script src="js/chapters.js"></script>
+  <script src="js/cheats.js"></script>
+</body>
+</html>

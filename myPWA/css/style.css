@@ -1,0 +1,413 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Average;
+  background: #f9f9f9;
+}
+
+.sidebar-container {
+  position: fixed;
+  top: 50%;
+  left: 0;
+  height: 80vh;
+  transform: translateY(-50%);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar {
+  position: relative;
+  width: auto;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  transition: all 0.4s ease;
+  color: black;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  transform: translateX(-100%);
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 1;
+}
+
+.sidebar.visible {
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.sidebar.pinned {
+  transform: translateX(0);
+  pointer-events: auto;
+  box-shadow: 0 0 8px rgba(0,0,0,0.2);
+}
+
+.sidebar-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 4px;
+  transition: all 0.5s ease;
+}
+
+.item:hover {
+  background: rgba(200, 200, 200, 0.4);
+}
+
+.item span {
+  margin-left: 10px;
+  display: none;
+}
+
+.sidebar.pinned .item span {
+  display: inline;
+}
+
+#sidebarlock {
+  top: 10px;
+}
+
+.tooltip {
+  position: fixed;
+  background: #fff;
+  color: #000;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.2);
+  pointer-events: none;
+  transition: all .3s ease;
+  opacity: 0;
+  z-index: 2000;
+}
+
+.tooltip.visible {
+  opacity: 1;
+}
+
+.sidebar.pinned ~ .tooltip.visible {
+  display: none;
+  opacity: 0 !important;
+}
+
+main {
+  margin-left: 30px;
+  padding: 40px;
+}
+
+#sidebarlock {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1010;
+  cursor: pointer;
+}
+
+#sidebarlock:hover ~ #tooltip {
+  opacity: 1;
+  display: block;
+}
+
+#key-float-container {
+  position: fixed;
+  bottom: 50%;
+  right: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 5000;
+}
+
+.key-float {
+  position: absolute;
+  font-size: 48px;
+  font-weight: bold;
+  opacity: 1;
+  color: #333;
+  animation: floatUp 1s ease-out forwards;
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translate(-50%, 0%);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -100%);
+    opacity: 0;
+  }
+}
+
+.keyboard {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 10px;
+}
+
+.keyboard-row {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+}
+
+.key {
+  padding: 12px 16px;
+  text-align: center;
+  font-size: 16px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  min-width: 40px;
+  user-select: none;
+  transition: all 0.3s ease;
+  cursor: autox;
+}
+
+.spacebar {
+  flex: 1;
+  min-width: 200px;
+  height: 16px;
+}
+
+.banner-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  pointer-events: none;
+  transition: all .5s ease;
+}
+
+.banner {
+  color: black;
+  padding: 10px 16px;
+  border-radius: 4px;
+  margin-top: 8px;
+  top: 20px;
+  right: -100%;
+  transform: translateX(150%);
+  transition: all 0.4s ease;
+  pointer-events: auto;
+  display: inline-block;
+}
+
+.banner.visible {
+  transform: translateX(0);
+}
+
+.tabContent {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(50px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  width: 100%;
+  max-width: 900px;
+  margin: 50px auto;
+  display: none;
+  position: relative; /* default for visible */
+}
+
+.tabContent.showing {
+  display: block;
+}
+
+.tabContent.active {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateX(0);
+}
+
+.tabContent.fading {
+  position: absolute; /* remove from flow during fade out */
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.typeWriter {
+  /* max-width: 100%; */
+}
+
+.secretAchievementImage {
+  width: 10%;
+  filter: invert(100%);
+  margin: 1%;
+}
+
+/* achievements */
+
+.achievmentImages {
+  display: grid;
+  grid-template-columns: repeat(10, 10fr);
+  gap: 8px;
+  padding: 10px;
+}
+
+.achievementImage {
+  width: 64px;
+  height: auto;
+  display: block;
+}
+
+.achievementWrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.achievementTooltip {
+  visibility: hidden;
+  background-color: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px 12px;
+  position: absolute;
+  top: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  z-index: 10;
+  width: max(200%, 160px);
+  max-width: calc(100vw - 20px);
+  box-sizing: border-box;
+}
+
+.achievementTooltip::after {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: transparent transparent rgba(0, 0, 0, 0.85) transparent;
+}
+
+.achievementWrapper:hover .achievementTooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+
+.achievementWrapper:hover .achievementTooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* mastery */
+
+.masteryGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.masteryItem {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.masteryBarWrapper {
+  background: #ddd;
+  height: 20px;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 5px;
+}
+
+.masteryBar {
+  background: linear-gradient(to right, #4caf50, #81c784);
+  height: 100%;
+  width: 0%;
+  transition: all 0.5s ease;
+}
+
+.masteryItem {
+  background-color: #fdfdfd;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease;
+}
+
+.masteryItem:hover {
+  transform: scale(1.01);
+}
+
+.masteryItem > div:first-child {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.masteryBarWrapper {
+  background-color: #e6e6e6;
+  border-radius: 6px;
+  height: 10px;
+  margin: 6px 0 10px;
+  overflow: hidden;
+}
+
+.masteryBar {
+  background: linear-gradient(to right, #4caf50, #81c784);
+  height: 100%;
+  transition: width 0.3s ease-in-out;
+}
+
+.upgradeSection {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.upgradeSection button {
+  background-color: #ffffff;
+  border: 1px solid #bbb;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  flex: 1 1 200px;
+  transition: all 0.2s ease;
+}
+
+.upgradeSection button:hover {
+  background-color: #f0f0f0;
+  transform: scale(1.02);
+}
+
+.upgradeSection span {
+  font-weight: bold;
+  color: #2e7d32;
+}
+
+#mastery-list {
+  max-width: 700px;
+  margin: 0 auto;
+}
