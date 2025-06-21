@@ -39,6 +39,11 @@ setInterval(() => {
 }, autoMonkeyInterval);
 
 function showFloatingKey() {
+    if (activeTab === "chapter") {
+        showFloatingKeyChapter();
+        return;
+    }
+
     const container = getID("key-float-container");
     const span = document.createElement("span");
     span.className = "key-float";
@@ -64,8 +69,7 @@ function showFloatingKey() {
     for (let i = 0; i < masteryOrder.length; i++) {
         acc += weightValue[i];
         if (rand < acc) {
-            selectedChar = masteryOrder[i];
-            break;
+            selectedChar = masteryOrder[i];            break;
         }
     }
 
@@ -176,5 +180,5 @@ function getLetterWeightProbability(letter) {
     totalWeight += tempWeightSum;
 
     const probability = (weightValue[masteryOrder.indexOf(letter)] / (totalWeight)) * 100;
-    return probability.toFixed(1);
+    return probability.toFixed(2);
 }

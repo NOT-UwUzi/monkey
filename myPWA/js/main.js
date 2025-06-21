@@ -112,6 +112,7 @@ const sidebarLockIcon = getID("sidebarlockicon");
 const tooltip = getID("tooltip");
 let hoveredKey = null;
 let pinned = false;
+let activeTab = "typeWriter";
 
 // lettergeneration
 const maxWeights = {};
@@ -137,7 +138,7 @@ masteryOrder.forEach(letter => droughtCounter[letter] = 0);
 const keyTimestamps = [];
 let lastKey = null;
 let keyHoldStart = null;
-let whataname = 1000;
+let whataname = 1;
 let autoMonkeyInterval = whataname;
 let autoMonkeyIntervalTab = getID("automonkeyinterval");
 
@@ -157,6 +158,10 @@ let chapterTabEnabled = false;
 
 // achievement flags
 let typedLetter = false;
+
+// chapter letter tracking
+const chapterTypedCount = {};
+const chapterOverflow = [];
 
 // mastery
 const masteryTab = getID("masteryTab");
@@ -203,3 +208,6 @@ alphabet.forEach(letter => {
     keyDrought[letter] = 0;
     greenProgress[letter] = 1;
 });
+
+// chapter pages
+const pagesContents = getID('chapter-paragraph');

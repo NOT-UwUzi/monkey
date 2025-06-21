@@ -51,6 +51,9 @@ function showPopup(type, text, duration = 5000) {
     } else if (type == "sidebarunlockerror") {
         banner.textContent = "Feature not unlocked yet.";
         banner.style.backgroundColor = "rgba(255, 71, 71, 0.5)";
+    } else if (type == "notenoughscrews") {
+        banner.textContent = `Not enough screws to purchase upgrade`; // yeah fix this.
+        banner.style.backgroundColor = "rgba(255, 71, 71, 0.5)";
     }
     container.appendChild(banner);
 
@@ -78,4 +81,14 @@ function unlockTab(id, label, icon) {
     setTimeout(() => tab.style.transition = "all .3s ease", 5000);
     if (id === "collection") collectionTabEnabled = true;
     if (id === "mastery") masteryTabEnabled = true;
+}
+
+// debounce (delay when upgrades)
+function debounce(fn, delay = 50) {
+    let timeout;
+    return function (...args) {
+        if (timeout) return; // skip if waiting
+        fn.apply(this, args);
+        timeout = setTimeout(() => { timeout = null; }, delay);
+    };
 }

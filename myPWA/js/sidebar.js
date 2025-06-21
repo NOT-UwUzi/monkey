@@ -18,6 +18,8 @@ btn.addEventListener('click', () => {
             c.style.display = "block";
             setTimeout(() => {
             c.classList.add('active');
+            activeTab = target;
+            console.log(activeTab);
             }, 10);
         } else {
             c.classList.remove('active');

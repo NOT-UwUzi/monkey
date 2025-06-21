@@ -1,9 +1,48 @@
+// upgrades
+function getUpgradeCost(type, level) {
+    if (type === "letterMultiplier") return Math.pow(4, level) * 1;
+    if (type === "triplePressChance") return Math.pow(3, level) * 2;
+    return Infinity;
+}
+
+function getLetterMultiplier(char) {
+    return Math.min(256, Math.pow(2, letterUpgrades[char].letterMultiplier.level));
+}
+
+function getTriplePressChance(char) {
+    return Math.min(0.4, letterUpgrades[char].triplePressChance.level * 0.05);
+}
+
+function getTotalScrews(count, char) {
+    let total = 0;
+    for (let i = 0; i < masteryMilestones.length; i++) {
+        if (count >= masteryMilestones[i]) total += screwsPerMilestone[i] || 0;
+        else break;
+    }
+    total -= spentScrews[char];
+    return Math.max(0, total);
+}
+
+function buyLetterUpgrade(char, type, screws) {
+    const upgrade = letterUpgrades[char][type];
+    const cost = getUpgradeCost(type, upgrade.level);
+
+    if (screws >= cost) {
+        spentScrews[char] += cost;
+        upgrade.level++;
+        updateMasteryProgress();
+    } else {
+        console.log("Not enough screws.");
+        showPopup("notenoughscrews", letterUpgrades[char][type]); // lol fix this!!
+    }
+}
+
+// mastery ui ONCE
 function updateMasteryUI() {
     const masteryList = getID("mastery-list");
-
     masteryList.innerHTML = "";
 
-    for (let char of "aeioulnrstdgbcmpfhvwykjxqz") {
+    for (let char of masteryOrder) {
         const index = masteryOrder.indexOf(char);
         const count = masteryValue[index] || 0;
         const isVisible = index <= masteredIndex;
@@ -42,12 +81,13 @@ function updateMasteryUI() {
                     Cost: <span id="cost-triple-${char}">${getUpgradeCost("triplePressChance", tripleLevel)}</span>
                 </button>` : ''}
             </div>
-        `; // idea, make it so that you can only unlock next mastery after u bought something for that one
+        `;
 
         masteryList.appendChild(container);
     }
 
-    masteryList.addEventListener("click", (e) => {
+    // click handler
+    masteryList.onclick = debounce((e) => {
         const btn = e.target.closest(".buy-upgrade");
         if (!btn) return;
 
@@ -55,17 +95,15 @@ function updateMasteryUI() {
         const type = btn.dataset.type;
         const count = masteryValue[masteryOrder.indexOf(char)] || 0;
         const screws = getTotalScrews(count, char);
-        buyLetterUpgrade(char, type, screws);
 
-        // refresh ui to reveal second upgrade
-        updateMasteryUI();
-    });
+        buyLetterUpgrade(char, type, screws);
+        updateMasteryProgress(); // only update progress
+    }, 50);
 }
 
-
-// updates progress bar
+// progress so no flashing stuff
 function updateMasteryProgress() {
-    for (let char of "aeioulnrstdgbcmpfhvwykjxqz") {
+    for (let char of masteryOrder) {
         const index = masteryOrder.indexOf(char);
         if (index > masteredIndex) continue;
 
@@ -91,45 +129,19 @@ function updateMasteryProgress() {
         const tripleEl = getID(`triple-${char}`);
         const costTripleEl = getID(`cost-triple-${char}`);
 
-        if (!countEl) continue; // skip if not rendered
+        if (!countEl) continue;
 
         countEl.textContent = count.toLocaleString();
         barEl.style.width = `${(progressToNext * 100).toFixed(1)}%`;
         screwsEl.textContent = screws;
         multEl.textContent = getLetterMultiplier(char);
         costMultEl.textContent = getUpgradeCost("letterMultiplier", multLevel);
-        tripleEl.textContent = (getTriplePressChance(char) * 100).toFixed(0);
-        costTripleEl.textContent = getUpgradeCost("triplePressChance", tripleLevel);
+
+        if (tripleEl) tripleEl.textContent = (getTriplePressChance(char) * 100).toFixed(0);
+        if (costTripleEl) costTripleEl.textContent = getUpgradeCost("triplePressChance", tripleLevel);
     }
 }
 
-
-// upgrades calculation
-function buyLetterUpgrade(char, type, screws) {
-    const upgrade = letterUpgrades[char][type];
-    const cost = getUpgradeCost(type, upgrade.level);
-
-    if (screws >= cost) {
-        spentScrews[char] += cost;
-        upgrade.level++;
-    } else {
-        console.log("Not enough screws.");
-    }
-}
-
-function getTotalScrews(count, char) {
-    let total = 0;
-    for (let i = 0; i < masteryMilestones.length; i++) {
-        if (count >= masteryMilestones[i]) {
-            total += screwsPerMilestone[i] || 0;
-        } else {
-            break;
-        }
-    }
-
-    total -= spentScrews[char];
-    return Math.max(0, total);
-}
-
+// initialising
 updateMasteryUI();
-setInterval(updateMasteryProgress, 10);
+setInterval(updateMasteryProgress, 1);
