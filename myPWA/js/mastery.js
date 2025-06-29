@@ -23,6 +23,16 @@ function getTotalScrews(count, char) {
     return Math.max(0, total);
 }
 
+function getTotalScrewsSpent() {
+    return Object.values(spentScrews).reduce((a, b) => a + b, 0);
+}
+
+function updateAutoMonkeyInterval() {
+    const baseInterval = 1000; // base interval in ms
+    const totalSpent = getTotalScrewsSpent();
+    autoMonkeyInterval = Math.max(50, baseInterval * Math.pow(0.9, totalSpent));
+}
+
 function buyLetterUpgrade(char, type, screws) {
     const upgrade = letterUpgrades[char][type];
     const cost = getUpgradeCost(type, upgrade.level);
@@ -30,6 +40,7 @@ function buyLetterUpgrade(char, type, screws) {
     if (screws >= cost) {
         spentScrews[char] += cost;
         upgrade.level++;
+        updateAutoMonkeyInterval();
         if (upgrade.level == 1) updateMasteryUI();
         updateMasteryProgress();
     } else {
@@ -43,6 +54,14 @@ function updateMasteryUI() {
     const masteryList = getID("mastery-list");
     masteryList.className = "lab-grid"; // apply grid layout
     masteryList.innerHTML = "";
+
+    const infoPanel = document.createElement("div");
+    infoPanel.className = "lab-info";
+    infoPanel.innerHTML = `
+        <div>Total Screws Spent: <span id="total-screws-spent">${getTotalScrewsSpent()}</span></div>
+        <button onclick="respecUpgrades()">Respec Upgrades</button>
+    `;
+    masteryList.appendChild(infoPanel);
 
     for (let char of masteryOrder) {
         const index = masteryOrder.indexOf(char);
@@ -76,7 +95,7 @@ function updateMasteryUI() {
 
             ${multiplierLevel > 0 ? `
             <button class="lab-btn buy-upgrade" data-char="${char}" data-type="triplePressChance">
-                Triple Press Chance (${(getTriplePressChance(char) * 100).toFixed(0)}%)<br>
+                Triple Press Chance (<span id="triple-${char}">${(getTriplePressChance(char) * 100).toFixed(0)}</span>%)<br>
                 Cost: <span id="cost-triple-${char}">${getUpgradeCost("triplePressChance", tripleLevel)}</span>
             </button>` : ''}
         `;
@@ -126,6 +145,20 @@ function updateMasteryProgress() {
         if (tripleEl) tripleEl.textContent = (getTriplePressChance(char) * 100).toFixed(0);
         if (costTripleEl) costTripleEl.textContent = getUpgradeCost("triplePressChance", tripleLevel);
     }
+
+    const totalSpentDisplay = getID("total-screws-spent");
+    if (totalSpentDisplay) totalSpentDisplay.textContent = getTotalScrewsSpent();
+}
+
+function respecUpgrades() {
+    for (let char of masteryOrder) {
+        letterUpgrades[char].letterMultiplier.level = 0;
+        letterUpgrades[char].triplePressChance.level = 0;
+        spentScrews[char] = 0;
+    }
+    updateAutoMonkeyInterval();
+    updateMasteryUI();
+    updateMasteryProgress();
 }
 
 // initialising
