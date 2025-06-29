@@ -7,7 +7,7 @@ document.getElementById("notationSelect").addEventListener("change", (e) => {
     // updateNotationStyle();
 });
 
-// Load last saved theme yay
+// load last saved theme yay
 const savedTheme = localStorage.getItem("theme") || "light";
 document.body.classList.add(`theme-${savedTheme}`);
 document.getElementById("themeSelect").value = savedTheme;
@@ -45,8 +45,11 @@ document.getElementById("cloudSave").addEventListener("click", () => {
 });
 
 document.getElementById("resetGame").addEventListener("click", () => {
-    if (confirm("Are you sure you want to reset your progress? This cannot be undone.")) {
+    const confirmation = prompt("Type RESET to permanently delete all progress.\nThis cannot be undone.");
+    if (confirmation === "RESET") {
         localStorage.clear();
         location.reload();
+    } else if (confirmation !== null) {
+        alert("Reset cancelled. You did not type RESET exactly.");
     }
 });

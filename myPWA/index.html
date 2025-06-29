@@ -125,6 +125,17 @@
       <button id="resetGame">Reset Game</button>
     </div>
 
+    <div id="resetModal" class="modal hidden">
+      <div class="modal-content">
+        <h3>Confirm Reset</h3>
+        <p>This will erase all progress. Type <b>RESET</b> below to confirm:</p>
+        <input type="text" id="resetInput" placeholder="Type RESET to confirm" />
+        <div class="modal-buttons">
+          <button id="cancelReset">Cancel</button>
+          <button id="confirmReset" disabled>Confirm</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="tabContent" id="shop">

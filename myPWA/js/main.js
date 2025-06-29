@@ -217,3 +217,9 @@ alphabet.forEach(letter => {
 
 // chapter pages
 const pagesContents = getID('chapter-paragraph');
+
+// settings
+const resetModal = document.getElementById("resetModal");
+const resetInput = document.getElementById("resetInput");
+const confirmReset = document.getElementById("confirmReset");
+const cancelReset = document.getElementById("cancelReset");
