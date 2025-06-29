@@ -1,0 +1,65 @@
+
+/* keyfloat */
+#key-float-container {
+    position: fixed;
+    bottom: 50%;
+    right: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 5000;
+}
+
+.key-float {
+    position: fixed;
+    font-size: 48px;
+    font-weight: bold;
+    opacity: 1;
+    color: #333;
+    animation: floatUp 1s ease-out forwards;
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translate(-50%, 0%);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -100%);
+        opacity: 0;
+    }
+}
+
+/* keyboard */
+.keyboard {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 10px;
+}
+
+.keyboard-row {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+}
+
+.key {
+    padding: 12px 16px;
+    text-align: center;
+    font-size: 16px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    min-width: 40px;
+    user-select: none;
+    transition: all 0.3s ease;
+    cursor: autox;
+}
+
+.spacebar {
+    flex: 1;
+    min-width: 200px;
+    height: 16px;
+}

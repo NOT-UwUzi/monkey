@@ -1,131 +1,108 @@
-// Chapter content (feel free to add more pages!)
-let chapterPages = [
-  "aaaeeaaeei aeiaiooiiiee aieoiao",
-  "banana bandana anna baboon noon",
-  "education is essential to evolution",
-];
-let currentPageIndex = 0;
-let currentPageSpans = [];
-let totalTypeableLetters = 0;
-let chapterProgress = 0;
-let chapterFinished = false;
-
-// HTML elements
-const paragraphElement = getID("chapter-paragraph");
-const overflowDisplay = getID("chapter-overflow");
-const progressDisplay = getID("chapter-progress");
-
-// Load the first page
-loadChapterPage(currentPageIndex);
-
-function loadChapterPage(index) {
-  const text = chapterPages[index].toLowerCase();
-  paragraphElement.innerHTML = "";
-  chapterTypedCount = {};
-  chapterOverflow.length = 0;
-  chapterProgress = 0;
-  chapterFinished = false;
-  totalTypeableLetters = 0;
-
-  for (let char of text) {
+function showFloatingKeyChapter () {
+    const container = getID("key-float-container-chapter");
     const span = document.createElement("span");
-    span.textContent = char;
-    span.className = "chapter-letter";
-    if (/[a-z]/.test(char)) {
-      span.style.opacity = 0.3;
-      totalTypeableLetters++;
-      chapterTypedCount[char] = 0;
+    span.className = "key-float";
+
+    WeightSum = weightValue.reduce((a, b) => a + b, 0);
+    if (weightValue[masteredIndex] == 0) weightValue[masteredIndex]++;
+    tempVar = Math.max(WeightSum/4, 20);
+    WeightSum += tempVar;
+
+    const rand = Math.random() * WeightSum;
+
+    let acc = 0;
+    let selectedChar = "void";
+
+    let currentChapter = getChapterContent().replace(/\s/g, "");
+    let currentLetter = currentChapter[currentPos];
+    const expected = (200 / getLetterWeightProbability(currentLetter)+1).toFixed(1);
+
+    // console.log(chapter, currentChapter, currentPos, currentLetter);
+
+    for (let i = 0; i < masteryOrder.length; i++) {
+        acc += weightValue[i];
+        if (rand < acc) {
+            selectedChar = masteryOrder[i];
+            break;
+        }
+    }
+
+    // fail
+    if (selectedChar === "void") {
+        droughtCounter[currentLetter]++;
+        if (droughtCounter[currentLetter] >= expected) {
+            console.log(`[Auto-mastery] "${currentLetter}" typed in chapter due to drought.`);
+            droughtCounter[currentLetter] = 0;
+            selectedChar = currentLetter;
+            span.textContent = selectedChar;
+            span.style.color = "#000";
+            span.classList.remove("failure-float");
+        } else {
+            span.textContent = randomFailure();
+            span.style.color = "rgba(128,128,128,1)";
+            span.style.fontStyle = "italic";
+            span.classList.add("failure-float");
+            container.appendChild(span);
+            setTimeout(() => span.remove(), 1000);
+            return;
+        }
     } else {
-      span.style.opacity = 1;
+        droughtCounter[selectedChar] = 0;
     }
-    paragraphElement.appendChild(span);
-  }
 
-  currentPageSpans = [...paragraphElement.querySelectorAll(".chapter-letter")];
-  updateChapterProgress();
-  updateOverflowDisplay();
-}
-
-// Draw a random letter from the current page
-function getRandomChapterLetter() {
-  const remaining = currentPageSpans.filter(
-    span => /[a-z]/.test(span.textContent) && span.style.opacity !== "1"
-  );
-  if (remaining.length === 0) return null;
-  const random = remaining[Math.floor(Math.random() * remaining.length)];
-  return random.textContent;
-}
-
-// Handle typing a letter in chapter mode
-function typeLetterInChapter(letter) {
-  letter = letter.toLowerCase();
-  let typed = false;
-
-  for (let span of currentPageSpans) {
-    if (span.textContent === letter && span.style.opacity !== "1") {
-      span.style.opacity = "1";
-      chapterTypedCount[letter]++;
-      chapterProgress++;
-      typed = true;
-      break;
+    if (selectedChar != currentLetter) {
+        droughtCounter[currentLetter]++;
+        if (droughtCounter[currentLetter] >= expected) {
+            console.log(`[Auto-mastery] "${currentLetter}" unlocked due to drought.`);
+            droughtCounter[currentLetter] = 0;
+            selectedChar = currentLetter;
+            span.textContent = selectedChar;
+            span.style.color = "#000";
+            span.classList.remove("failure-float");
+            return;
+        }
+        span.textContent = selectedChar;
+        span.style.color = "rgba(206, 53, 53, .5)";
+        container.appendChild(span);
+        setTimeout(() => span.remove(), 1000);
+        return;
     }
-  }
 
-  if (!typed) {
-    // Overflow
-    const isAlreadyOverflowed = chapterOverflow.includes(letter);
-    if (!isAlreadyOverflowed) chapterOverflow.push(letter);
-    updateOverflowDisplay();
-  }
+    span.textContent = selectedChar;
+    span.style.color = "#000";
+    currentPos++;
+    if (currentPos >= currentChapter.length-1) {chapter++; currentPos = 0;}
+    displayChapterContent(currentPos)
 
-  updateChapterProgress();
-
-  // Check if page completed
-  if (chapterProgress >= totalTypeableLetters && !chapterFinished) {
-    chapterFinished = true;
-    setTimeout(() => {
-      if (currentPageIndex + 1 < chapterPages.length) {
-        currentPageIndex++;
-        loadChapterPage(currentPageIndex);
-      } else {
-        progressDisplay.textContent = "All chapters completed!";
-      }
-    }, 1000);
-  }
+    container.appendChild(span);
+    setTimeout(() => span.remove(), 1000);
 }
 
-// Display progress
-function updateChapterProgress() {
-  if (progressDisplay) {
-    progressDisplay.textContent = `Progress: ${chapterProgress} / ${totalTypeableLetters}`;
-  }
+function displayChapterContent(currentPos) {
+    let tempVar1 = 0;
+    let result = ""
+    let caretInserted = false;
+    for (let char of getChapterContent()) {
+        if (tempVar1 < currentPos && char !== " ") {
+            result += `<span class="black">${char}</span>`
+            tempVar1++;
+        } else if (char == " ") {
+            result += `<span class="gray">${char}</span>`;
+        } else {
+            if (!caretInserted) {
+                result += `<span class="caret">|</span>`;
+                caretInserted = true;
+            }
+            result += `<span class="gray">${char}</span>`;
+        }
+    }
+    if (!caretInserted) result += `<span class="caret">|</span>`;
+
+    chapterPage.innerHTML = result;
+    chapterDisplay.innerHTML = "Current Chapter:" + chapter;
 }
 
-// Display overflowed letters
-function updateOverflowDisplay() {
-  if (overflowDisplay) {
-    overflowDisplay.textContent = `Overflow: ${[...new Set(chapterOverflow)].join(", ")}`;
-  }
+function getChapterContent() {
+    if (chapter >= chapters.length) return "maxed";
+    else return chapters[chapter - 1];
 }
-
-function showFloatingKeyChapter() {
-  const letter = getRandomChapterLetter();
-  if (!letter) return;
-
-  const container = getID("key-float-container");
-  const span = document.createElement("span");
-  span.className = "key-float";
-  span.textContent = letter;
-  span.style.color = "#000";
-
-  container.appendChild(span);
-  setTimeout(() => span.remove(), 1000);
-}
-
-// Allow keyboard input
-document.addEventListener("keydown", (e) => {
-  const key = e.key.toLowerCase();
-  if (/^[a-z]$/.test(key)) {
-    typeLetterInChapter(key);
-  }
-});

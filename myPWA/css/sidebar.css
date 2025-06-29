@@ -1,0 +1,83 @@
+.sidebar-container {
+    position: fixed;
+    top: 50%;
+    left: 0;
+    height: 80vh;
+    transform: translateY(-50%);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar {
+    position: relative;
+    width: auto;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    transition: all 0.4s ease;
+    color: black;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    transform: translateX(-100%);
+    pointer-events: none;
+    overflow: hidden;
+    opacity: 1;
+}
+
+.sidebar.visible,
+.sidebar.pinned {
+    transform: translateX(0);
+    pointer-events: auto;
+}
+
+.sidebar.pinned {
+    box-shadow: 0 0 8px rgba(0,0,0,0.2);
+}
+
+.sidebar-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 4px;
+    transition: all 0.5s ease;
+}
+
+.item:hover {
+    background: rgba(180, 180, 180, 0.4);
+}
+
+.item.active {
+    background: rgba(220, 220, 220, 0.6);
+}
+
+.item span {
+    margin-left: 10px;
+    display: none;
+}
+
+.sidebar.pinned .item span {
+    display: inline;
+}
+
+#sidebarlock {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1010;
+    cursor: pointer;
+}
+
+#sidebarlock:hover ~ #tooltip {
+    opacity: 1;
+    display: block;
+}

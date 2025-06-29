@@ -113,6 +113,8 @@ const tooltip = getID("tooltip");
 let hoveredKey = null;
 let pinned = false;
 let activeTab = "typeWriter";
+let tabTimeouts = new Map();
+let tabLocked = false;
 
 // lettergeneration
 const maxWeights = {};
@@ -124,7 +126,7 @@ const maxWeights = {};
 "j","x",
 "q","z"].forEach(letter => maxWeights[letter] = 100);
 const alphabet = [..."abcdefghijklmnopqrstuvwxyz"];
-const masteryOrder = [..."aeioulnrstdgbcmpfhvwykjxqz"];
+const masteryOrder = [..."aeioulnrstdgbcmpfhvwykjxqz", "max"];
 const masteryValue = new Array(masteryOrder.length).fill(0);
 const weightValue = new Array(masteryOrder.length).fill(0);
 let WeightSum;
@@ -138,9 +140,10 @@ masteryOrder.forEach(letter => droughtCounter[letter] = 0);
 const keyTimestamps = [];
 let lastKey = null;
 let keyHoldStart = null;
-let whataname = 1;
-let autoMonkeyInterval = whataname;
+let autoMonkeyInterval = 1;
+let currentPos = 0;
 let autoMonkeyIntervalTab = getID("automonkeyinterval");
+let intervalId = null;
 
 // achievements
 const achievements = [];
@@ -160,8 +163,11 @@ let chapterTabEnabled = false;
 let typedLetter = false;
 
 // chapter letter tracking
-const chapterTypedCount = {};
-const chapterOverflow = [];
+let chapter = 1;
+let chapters = ["aaaaaa aaaaaa aaaaaaaa", "aeeae eaea iiaieaeae", "aeiaeiaeio eaeiaeiaoei aoeiea"];
+let chapterPage = getID("chapter-paragraph");
+let chapterDisplay = getID("current-chapter");
+let caretInserted = false;
 
 // mastery
 const masteryTab = getID("masteryTab");
@@ -194,7 +200,7 @@ function getTriplePressChance(char) {
 
 // collections
 let page = "";
-
+    
 // tabs
 const buttons = document.querySelectorAll('.sidebarBtn');
 const contents = document.querySelectorAll('.tabContent');

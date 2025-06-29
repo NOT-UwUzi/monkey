@@ -1,0 +1,17 @@
+.chapterParagraph {
+    margin: 20px;
+}
+
+#key-float-container-chapter {
+    position: absolute;
+    bottom: 50%;
+    right: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 5000;
+}
+
+.caret {
+    color: black;
+    animation: blink 1s step-end infinite;
+}

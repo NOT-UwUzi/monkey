@@ -3,7 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <title>monkey</title>
-  <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/root.css">
+    <link rel="stylesheet" href="css/chapters.css">
+    <link rel="stylesheet" href="css/mastery.css">
+    <link rel="stylesheet" href="css/keys.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/tabs.css">
+    <link rel="stylesheet" href="css/tooltip.css">
+    <link rel="stylesheet" href="css/testing.css">
   <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
 </head>
 <body>
@@ -17,7 +24,7 @@
           <box-icon name="chevrons-right" animation="tada-hover" id="sidebarlockicon"></box-icon>
         </div>
         <div class="folders">
-          <div class="item sidebarBtn" data-tab="typeWriter" label="TypeWriter"><box-icon name="message"></box-icon><span>TypeWriter</span></div>
+          <div class="item sidebarBtn active" data-tab="typeWriter" label="TypeWriter"><box-icon name="message"></box-icon><span>TypeWriter</span></div>
           <div class="item sidebarBtn" data-tab="chapter" label="Unlocked after ???" id="chapterTab"><box-icon name="question-mark"></box-icon><span>???</span></div>
           <div class="item sidebarBtn" data-tab="achievement" label="Unlocked after ???" id="achievementTab"><box-icon name="question-mark"></box-icon><span>???</span></div>
           <div class="item sidebarBtn" data-tab="mastery" label="Unlocked after ???" id="masteryTab"><box-icon name="question-mark"></box-icon><span>???</span></div>
@@ -42,9 +49,9 @@
   </div>
 
   <div class="tabContent" id="chapter">
-    <div id="chapter-paragraph"></div>
-    <div id="chapter-progress"></div>
-    <div id="chapter-overflow"></div>
+    <div id="chapter-paragraph" class="chapterParagraph"></div>
+    <div id="current-chapter"></div>
+    <div id="key-float-container-chapter"></div>
   </div>
 
   <div class="tabContent" id="achievement">
@@ -58,7 +65,6 @@
   </div>
 
   <div class="tabContent" id="mastery">
-    <p>Mastery tab content</p>
     <div id="mastery-list" class="masteryGrid"></div>
   </div>
 
@@ -67,7 +73,58 @@
   </div>
 
   <div class="tabContent" id="settings">
-    <p>Settings menu here.</p>
+    <div class="settings-section">
+      <h3>Game Options</h3>
+      <label><input type="checkbox" id="notationToggle"> Use scientific notation</label><br>
+      <label><input type="checkbox" id="autosaveToggle" checked> Enable autosave</label><br>
+      <label><input type="checkbox" id="confirmationsToggle"> Show confirmations</label>
+    </div>
+
+    <div class="settings-section">
+      <h3>Visual</h3>
+      <label><input type="checkbox" id="animationToggle"> Enable animations</label><br>
+      <label><input type="checkbox" id="themeToggle"> Dark theme</label>
+    </div>
+
+    <div class="settings-section">
+      <h3>Automation</h3>
+      <label><input type="checkbox" id="autoBuyToggle"> Enable autobuyers</label><br>
+      <label><input type="checkbox" id="bulkToggle"> Buy max instead of 10</label>
+    </div>
+
+    <div class="settings-section">
+      <h3>UI</h3>
+      <label for="notationSelect">Number notation:</label>
+      <select id="notationSelect">
+        <option value="scientific">Scientific</option>
+        <option value="engineering">Engineering</option>
+        <option value="logarithm">Logarithm</option>
+        <option value="letters">Letters</option>
+        <option value="mixed">Mixed</option>
+      </select>
+    </div>
+
+    <div class="settings-section">
+      <h3>Theme</h3>
+      <label for="themeSelect">Choose theme:</label>
+      <select id="themeSelect">
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+        <option value="highContrast">High Contrast</option>
+        <option value="vaporwave">Vaporwave</option>
+      </select>
+    </div>
+
+    <div class="settings-section">
+      <h3>Save Management</h3>
+      <button id="exportSave">Export Save</button>
+      <button id="importSave">Import Save</button>
+      <input type="file" id="importSaveFile" style="display: none;" accept=".txt">
+      <button id="customSave">Download Custom Save File</button>
+      <button id="cloudSave">Cloud Save</button>
+      <button id="resetGame">Reset Game</button>
+    </div>
+
   </div>
 
   <div class="tabContent" id="shop">
@@ -89,5 +146,6 @@
   <script src="js/mastery.js"></script>
   <script src="js/chapters.js"></script>
   <script src="js/cheats.js"></script>
+  <script src="js/settings.js"></script>
 </body>
 </html>

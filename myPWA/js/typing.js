@@ -1,5 +1,3 @@
-// Adds mastery upgrades (letter multiplier + triple press) into key generation logic
-
 // type
 document.addEventListener("keydown", (e) => {
     if (e.key.toLowerCase() == 's' && e.ctrlKey && !e.repeat) {
@@ -31,14 +29,25 @@ document.addEventListener("keydown", (e) => {
 });
 
 // automonkey!!
-setInterval(() => {
-    if (!autoMonkeyPaused) {
-        const randomKey = alphabet[Math.floor(Math.random() * alphabet.length)];
-        showFloatingKey(randomKey);
-    }
-}, autoMonkeyInterval);
+function startAutoMonkey() {
+    if (intervalId) clearInterval(intervalId);
+    intervalId = setInterval(() => {
+        if (!autoMonkeyPaused) {
+            const randomKey = alphabet[Math.floor(Math.random() * alphabet.length)];
+            showFloatingKey(randomKey);
+        }
+    }, autoMonkeyInterval);
+}
 
-function showFloatingKey() {
+function updateInterval(newInterval) {
+    autoMonkeyInterval = newInterval;
+    startAutoMonkey();
+}
+
+startAutoMonkey();
+
+// keys
+function showFloatingKey(forcedKey = null) {
     if (activeTab === "chapter") {
         showFloatingKeyChapter();
         return;
@@ -69,10 +78,12 @@ function showFloatingKey() {
     for (let i = 0; i < masteryOrder.length; i++) {
         acc += weightValue[i];
         if (rand < acc) {
-            selectedChar = masteryOrder[i];            break;
+            selectedChar = masteryOrder[i];
+            break;
         }
     }
 
+    // fail
     if (selectedChar === "void") {
         droughtCounter[currentLetter]++;
         if (droughtCounter[currentLetter] >= expected) {

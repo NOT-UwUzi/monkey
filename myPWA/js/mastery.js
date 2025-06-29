@@ -30,6 +30,7 @@ function buyLetterUpgrade(char, type, screws) {
     if (screws >= cost) {
         spentScrews[char] += cost;
         upgrade.level++;
+        if (upgrade.level == 1) updateMasteryUI();
         updateMasteryProgress();
     } else {
         console.log("Not enough screws.");
@@ -40,68 +41,62 @@ function buyLetterUpgrade(char, type, screws) {
 // mastery ui ONCE
 function updateMasteryUI() {
     const masteryList = getID("mastery-list");
+    masteryList.className = "lab-grid"; // apply grid layout
     masteryList.innerHTML = "";
 
     for (let char of masteryOrder) {
         const index = masteryOrder.indexOf(char);
         const count = masteryValue[index] || 0;
-        const isVisible = index <= masteredIndex;
-        if (!isVisible) continue;
+        if (index > masteredIndex) continue;
 
         const multiplierLevel = letterUpgrades[char].letterMultiplier.level;
         const tripleLevel = letterUpgrades[char].triplePressChance.level;
 
-        const showTriple = multiplierLevel > 0;
-
         const container = document.createElement("div");
-        container.className = "masteryItem";
+        container.className = "lab-station";
         container.dataset.char = char;
 
         container.innerHTML = `
-            <div class="masteryHeader">
-                <strong>${char.toUpperCase()}</strong> — <span id="count-${char}">0</span> typed
+            <div class="lab-header">
+                <span>${char.toUpperCase()}</span>
+                <span>${getLetterMultiplier(char)}x Multiplier</span>
             </div>
 
-            <div class="masteryBarWrapper">
-                <div class="masteryBar" id="bar-${char}" style="width: 0%"></div>
+            <div>Typed: <span id="count-${char}">${count}</span></div>
+            <div>Screws: <span id="screws-${char}">0</span></div>
+
+            <div class="lab-progress">
+                <div class="lab-bar" id="bar-${char}" style="width: 0%"></div>
             </div>
 
-            <div class="screwDisplay">
-                Total Screws: <span id="screws-${char}">0</span>
-            </div>
+            <button class="lab-btn buy-upgrade" data-char="${char}" data-type="letterMultiplier">
+                Letter Multiplier<br>
+                Cost: <span id="cost-mult-${char}">${getUpgradeCost("letterMultiplier", multiplierLevel)}</span>
+            </button>
 
-            <div class="upgradeSection">
-                <button class="buy-upgrade" data-char="${char}" data-type="letterMultiplier">
-                    Letter Multiplier (<span id="mult-${char}">${getLetterMultiplier(char)}</span>x)<br>
-                    Cost: <span id="cost-mult-${char}">${getUpgradeCost("letterMultiplier", multiplierLevel)}</span>
-                </button>
-                ${showTriple ? `
-                <button class="buy-upgrade" data-char="${char}" data-type="triplePressChance">
-                    Triple Press Chance (<span id="triple-${char}">${(getTriplePressChance(char) * 100).toFixed(0)}</span>%)<br>
-                    Cost: <span id="cost-triple-${char}">${getUpgradeCost("triplePressChance", tripleLevel)}</span>
-                </button>` : ''}
-            </div>
+            ${multiplierLevel > 0 ? `
+            <button class="lab-btn buy-upgrade" data-char="${char}" data-type="triplePressChance">
+                Triple Press Chance (${(getTriplePressChance(char) * 100).toFixed(0)}%)<br>
+                Cost: <span id="cost-triple-${char}">${getUpgradeCost("triplePressChance", tripleLevel)}</span>
+            </button>` : ''}
         `;
 
         masteryList.appendChild(container);
     }
 
-    // click handler
     masteryList.onclick = debounce((e) => {
         const btn = e.target.closest(".buy-upgrade");
         if (!btn) return;
-
         const char = btn.dataset.char;
         const type = btn.dataset.type;
         const count = masteryValue[masteryOrder.indexOf(char)] || 0;
         const screws = getTotalScrews(count, char);
 
         buyLetterUpgrade(char, type, screws);
-        updateMasteryProgress(); // only update progress
+        updateMasteryProgress();
     }, 50);
 }
 
-// progress so no flashing stuff
 function updateMasteryProgress() {
     for (let char of masteryOrder) {
         const index = masteryOrder.indexOf(char);
@@ -121,22 +116,13 @@ function updateMasteryProgress() {
         const multLevel = letterUpgrades[char].letterMultiplier.level;
         const tripleLevel = letterUpgrades[char].triplePressChance.level;
 
-        const countEl = getID(`count-${char}`);
-        const barEl = getID(`bar-${char}`);
-        const screwsEl = getID(`screws-${char}`);
-        const multEl = getID(`mult-${char}`);
-        const costMultEl = getID(`cost-mult-${char}`);
+        getID(`count-${char}`).textContent = count.toLocaleString();
+        getID(`bar-${char}`).style.width = `${(progressToNext * 100).toFixed(1)}%`;
+        getID(`screws-${char}`).textContent = screws;
+        getID(`cost-mult-${char}`).textContent = getUpgradeCost("letterMultiplier", multLevel);
+
         const tripleEl = getID(`triple-${char}`);
         const costTripleEl = getID(`cost-triple-${char}`);
-
-        if (!countEl) continue;
-
-        countEl.textContent = count.toLocaleString();
-        barEl.style.width = `${(progressToNext * 100).toFixed(1)}%`;
-        screwsEl.textContent = screws;
-        multEl.textContent = getLetterMultiplier(char);
-        costMultEl.textContent = getUpgradeCost("letterMultiplier", multLevel);
-
         if (tripleEl) tripleEl.textContent = (getTriplePressChance(char) * 100).toFixed(0);
         if (costTripleEl) costTripleEl.textContent = getUpgradeCost("triplePressChance", tripleLevel);
     }

@@ -1,0 +1,38 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body.theme-light {
+    --bg: #ffffff;
+    --text: #000000;
+}
+body.theme-dark {
+    --bg: #1c1c1c;
+    --text: #eeeeee;
+}
+body.theme-highContrast {
+    --bg: #000000;
+    --text: #ffff00;
+}
+
+body.theme-vaporwave {
+    --bg: #ffccff;
+    --text: #660066;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: Average;
+}
+
+
+main {
+    margin-left: 30px;
+    padding: 40px;
+}
+
+.black { color: black; }
+.gray { color: gray; }

@@ -1,0 +1,19 @@
+#settings {
+  padding: 15px;
+  font-size: 14px;
+}
+
+.settings-section {
+  margin-bottom: 20px;
+  padding: 10px;
+  background: rgba(240, 240, 240, 0.6);
+  border-radius: 8px;
+}
+
+.settings-section h3 {
+  margin-top: 0;
+  font-size: 16px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 4px;
+  margin-bottom: 8px;
+}
