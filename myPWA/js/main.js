@@ -140,7 +140,7 @@ masteryOrder.forEach(letter => droughtCounter[letter] = 0);
 const keyTimestamps = [];
 let lastKey = null;
 let keyHoldStart = null;
-let autoMonkeyInterval = 1;
+let autoMonkeyInterval = 100;
 let currentPos = 0;
 let autoMonkeyIntervalTab = getID("automonkeyinterval");
 let intervalId = null;

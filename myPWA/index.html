@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="css/tooltip.css">
     <link rel="stylesheet" href="css/testing.css">
   <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
 
@@ -120,8 +121,24 @@
       <button id="exportSave">Export Save</button>
       <button id="importSave">Import Save</button>
       <input type="file" id="importSaveFile" style="display: none;" accept=".txt">
-      <button id="customSave">Download Custom Save File</button>
+      <button id="customSave">Download Save File</button>
+      
       <button id="cloudSave">Cloud Save</button>
+      <div id="g_id_onload"
+        data-client_id="YOUR_GOOGLE_CLIENT_ID"
+        data-callback="handleGoogleLogin"
+        data-auto_prompt="false">
+      </div>
+
+      <div class="g_id_signin"
+        data-type="standard"
+        data-size="large"
+        data-theme="outline"
+        data-text="sign_in_with"
+        data-shape="rectangular"
+        data-logo_alignment="left">
+      </div>
+
       <button id="resetGame">Reset Game</button>
     </div>
 

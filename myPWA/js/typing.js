@@ -9,6 +9,7 @@ document.addEventListener("keydown", (e) => {
     if (e.ctrlKey) return;
 
     if (!canType) return;
+    if (!/^[a-zA-Z]$/.test(e.key)) return;
     if (!typedLetter) {
         typedLetter = true;
         unlockAchievement("01");

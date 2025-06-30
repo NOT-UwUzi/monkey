@@ -31,6 +31,8 @@ function updateAutoMonkeyInterval() {
     const baseInterval = 1000; // base interval in ms
     const totalSpent = getTotalScrewsSpent();
     autoMonkeyInterval = Math.max(50, baseInterval * Math.pow(0.9, totalSpent));
+    const intervalDisplay = document.getElementById("auto-monkey-interval");
+    if (intervalDisplay) intervalDisplay.textContent = autoMonkeyInterval.toFixed(0) + "ms";
 }
 
 function buyLetterUpgrade(char, type, screws) {
@@ -54,14 +56,6 @@ function updateMasteryUI() {
     const masteryList = getID("mastery-list");
     masteryList.className = "lab-grid"; // apply grid layout
     masteryList.innerHTML = "";
-
-    const infoPanel = document.createElement("div");
-    infoPanel.className = "lab-info";
-    infoPanel.innerHTML = `
-        <div>Total Screws Spent: <span id="total-screws-spent">${getTotalScrewsSpent()}</span></div>
-        <button onclick="respecUpgrades()">Respec Upgrades</button>
-    `;
-    masteryList.appendChild(infoPanel);
 
     for (let char of masteryOrder) {
         const index = masteryOrder.indexOf(char);
@@ -102,6 +96,15 @@ function updateMasteryUI() {
 
         masteryList.appendChild(container);
     }
+
+    const infoPanel = document.createElement("div");
+    infoPanel.className = "lab-info";
+    infoPanel.innerHTML = `
+        <div>Total Screws Spent: <span id="total-screws-spent">${getTotalScrewsSpent()}</span></div>
+        <div>AutoMonkey Interval: <span id="auto-monkey-interval">Loading...</span></div>
+        <button onclick="respecUpgrades()">Respec Upgrades</button>
+    `;
+    masteryList.appendChild(infoPanel);
 
     masteryList.onclick = debounce((e) => {
         const btn = e.target.closest(".buy-upgrade");
@@ -148,6 +151,9 @@ function updateMasteryProgress() {
 
     const totalSpentDisplay = getID("total-screws-spent");
     if (totalSpentDisplay) totalSpentDisplay.textContent = getTotalScrewsSpent();
+
+    const intervalDisplay = getID("auto-monkey-interval");
+    if (intervalDisplay) intervalDisplay.textContent = autoMonkeyInterval.toFixed(0) + "ms";
 }
 
 function respecUpgrades() {
