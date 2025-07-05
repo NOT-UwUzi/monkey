@@ -40,11 +40,6 @@ function startAutoMonkey() {
     }, autoMonkeyInterval);
 }
 
-function updateInterval(newInterval) {
-    autoMonkeyInterval = newInterval;
-    startAutoMonkey();
-}
-
 startAutoMonkey();
 
 // keys
@@ -169,8 +164,8 @@ function showFloatingKey(forcedKey = null) {
             nextKeyDiv.style.filter = "";
         }
         if (masteredIndex === 1) unlockAchievement("02");
-        if (masteredIndex === 2 && !masteryTabEnabled) unlockTab("mastery", "Masteries", "trophy");
-        if (masteredIndex === 3 && !collectionTabEnabled) unlockTab("collection", "Collections", "collection");
+        if (masteredIndex === 1 && !masteryTabEnabled) unlockTab("mastery", "Masteries", "trophy");
+        if (masteredIndex === 2 && !collectionTabEnabled) unlockTab("collection", "Collections", "collection");
     }
 
     container.appendChild(span);

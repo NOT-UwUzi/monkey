@@ -140,7 +140,7 @@ masteryOrder.forEach(letter => droughtCounter[letter] = 0);
 const keyTimestamps = [];
 let lastKey = null;
 let keyHoldStart = null;
-let autoMonkeyInterval = 100;
+let autoMonkeyInterval = 1;
 let currentPos = 0;
 let autoMonkeyIntervalTab = getID("automonkeyinterval");
 let intervalId = null;
@@ -173,15 +173,19 @@ let caretInserted = false;
 const masteryTab = getID("masteryTab");
 let masteryModeActive = false;
 let masteryListDiv = null;
-const letterUpgrades = {};
-for (const char of "abcdefghijklmnopqrstuvwxyz") {
-    letterUpgrades[char] = {
-        letterMultiplier: { level: 0 },
-        triplePressChance: { level: 0 }
-    };
-}
+// let letterUpgrades = {};
+// for (const char of "abcdefghijklmnopqrstuvwxyz") {
+//     if (!letterUpgrades[char]) continue;
+//     letterUpgrades[char] = {
+//         letterMultiplier: { level: 0 },
+//         triplePressChance: { level: 0 }
+//     };
+// }
 const spentScrews = {};
 [..."abcdefghijklmnopqrstuvwxyz"].forEach(letter => spentScrews[letter] = 0);
+
+// collections
+let page = "";
 
 // mastery functions
 function getUpgradeCost(type, level) {
@@ -197,9 +201,6 @@ function getLetterMultiplier(char) {
 function getTriplePressChance(char) {
     return Math.min(0.4, letterUpgrades[char].triplePressChance.level * 0.05);
 }
-
-// collections
-let page = "";
     
 // tabs
 const buttons = document.querySelectorAll('.sidebarBtn');

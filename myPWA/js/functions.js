@@ -52,7 +52,8 @@ function showPopup(type, text, duration = 5000) {
         banner.textContent = "Feature not unlocked yet.";
         banner.style.backgroundColor = "rgba(255, 71, 71, 0.5)";
     } else if (type == "notenoughscrews") {
-        banner.textContent = `Not enough screws to purchase upgrade`; // yeah fix this.
+        if (text == 1) banner.textContent = `Not enough screws to purchase upgrade. You need ${text} screw to purchase this upgrade.`;
+        else banner.textContent = `Not enough screws to purchase upgrade. You need ${text} screws to purchase this upgrade.`;
         banner.style.backgroundColor = "rgba(255, 71, 71, 0.5)";
     }
     container.appendChild(banner);

@@ -18,8 +18,6 @@ buttons.forEach(btn => {
         }
 
         if (target == "chapter") displayChapterContent(currentPos);
-        if (target == "mastery") console.log("Test");
-
         tabLocked = true;
         setTimeout(() => tabLocked = false, 1); // no breaking!
 

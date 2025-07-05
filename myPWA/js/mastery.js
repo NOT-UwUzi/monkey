@@ -1,3 +1,11 @@
+const letterUpgrades = {};
+for (const char of "abcdefghijklmnopqrstuvwxyz") {
+    letterUpgrades[char] = {
+        letterMultiplier: { level: 0 },
+        triplePressChance: { level: 0 }
+    };
+}
+
 // upgrades
 function getUpgradeCost(type, level) {
     if (type === "letterMultiplier") return Math.pow(4, level) * 1;
@@ -6,7 +14,8 @@ function getUpgradeCost(type, level) {
 }
 
 function getLetterMultiplier(char) {
-    return Math.min(256, Math.pow(2, letterUpgrades[char].letterMultiplier.level));
+    let x = 1 << letterUpgrades[char].letterMultiplier.level;
+    return Math.min(256, x);
 }
 
 function getTriplePressChance(char) {
@@ -28,11 +37,13 @@ function getTotalScrewsSpent() {
 }
 
 function updateAutoMonkeyInterval() {
-    const baseInterval = 1000; // base interval in ms
+    const baseInterval = 500; // base interval in ms
     const totalSpent = getTotalScrewsSpent();
-    autoMonkeyInterval = Math.max(50, baseInterval * Math.pow(0.9, totalSpent));
+    autoMonkeyInterval = Math.max(1, baseInterval * Math.pow(0.9, totalSpent));
     const intervalDisplay = document.getElementById("auto-monkey-interval");
-    if (intervalDisplay) intervalDisplay.textContent = autoMonkeyInterval.toFixed(0) + "ms";
+    if (intervalDisplay) intervalDisplay.textContent = autoMonkeyInterval.toFixed(2) + "ms";
+    console.log(autoMonkeyInterval);
+    startAutoMonkey();
 }
 
 function buyLetterUpgrade(char, type, screws) {
@@ -43,11 +54,11 @@ function buyLetterUpgrade(char, type, screws) {
         spentScrews[char] += cost;
         upgrade.level++;
         updateAutoMonkeyInterval();
-        if (upgrade.level == 1) updateMasteryUI();
+        updateMasteryUI();
         updateMasteryProgress();
     } else {
         console.log("Not enough screws.");
-        showPopup("notenoughscrews", letterUpgrades[char][type]); // lol fix this!!
+        showPopup("notenoughscrews", cost);
     }
 }
 
@@ -83,13 +94,13 @@ function updateMasteryUI() {
             </div>
 
             <button class="lab-btn buy-upgrade" data-char="${char}" data-type="letterMultiplier">
-                Letter Multiplier<br>
+                Letter Multiplier: x2 increase<br>
                 Cost: <span id="cost-mult-${char}">${getUpgradeCost("letterMultiplier", multiplierLevel)}</span>
             </button>
 
             ${multiplierLevel > 0 ? `
             <button class="lab-btn buy-upgrade" data-char="${char}" data-type="triplePressChance">
-                Triple Press Chance (<span id="triple-${char}">${(getTriplePressChance(char) * 100).toFixed(0)}</span>%)<br>
+                Triple Press Chance (<span id="triple-${char}">${(getTriplePressChance(char) * 100).toFixed(0)}</span>%): +5% chance<br>
                 Cost: <span id="cost-triple-${char}">${getUpgradeCost("triplePressChance", tripleLevel)}</span>
             </button>` : ''}
         `;
@@ -158,15 +169,17 @@ function updateMasteryProgress() {
 
 function respecUpgrades() {
     for (let char of masteryOrder) {
+        if (char.length != 1) continue;
+        console.log(char);
         letterUpgrades[char].letterMultiplier.level = 0;
         letterUpgrades[char].triplePressChance.level = 0;
         spentScrews[char] = 0;
     }
     updateAutoMonkeyInterval();
-    updateMasteryUI();
     updateMasteryProgress();
+    updateMasteryUI();
 }
 
 // initialising
 updateMasteryUI();
-setInterval(updateMasteryProgress, 1);
+setInterval(updateMasteryProgress, 10);
