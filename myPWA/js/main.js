@@ -8,96 +8,101 @@ function safeKeyId(key) {
 
 // achievement list
 const achievementData = {
-"01": {
+"1": {
     name: "A lucky start?",
     condition: "Press the key as the monkey.",
     reward: "Unlocks Achievements"
 },
-"02": {
+"2": {
     name: "Master of one, Jack of none",
     condition: "Master A",
     reward: ""
 },
-"03": {
-    name: "A screw.",
-    condition: "Get the first A screw",
+"3": {
+    name: "A fresh page",
+    condition: "Complete the first chapter",
     reward: ""
 },
-"04": {
-    name: "Mi, a name I call myself",
-    condition: "Master E",
-    reward: ""
-},
-"05": {
+"4": {
     name: "Just One Letter? Pathetic.",
     condition: "Finish the first letter.",
     reward: ""
 },
-"06": {
+"5": {
+    name: "A screw",
+    condition: "Get the first A screw",
+    reward: ""
+},
+"6": {
+    name: "Mi, a name I call myself",
+    condition: "Master I",
+    reward: ""
+},
+"7": {
     name: "U are screwed",
     condition: "Get the first U screw.",
     reward: ""
 },
-"07": {
+"8": {
     name: "Buffed Vowels",
     condition: "Upgrade every single vowel.",
     reward: "Automonkeys work 0.5% faster."
 },
-"08": {
+"9": {
     name: "Prestigious Monkey",
     condition: "Prestige for the first time.",
     reward: ""
 },
-"09": {
+"10": {
     name: "A Healthy Sleep Schedule",
     condition: "Be offline for a period of 10 hours",
     reward: "+5% Offline rewards."
 },
-"10": {
+"11": {
     name: "This isn’t a river, is it?",
     condition: "Unlock overflow",
     reward: ""
 },
-"11": {
+"12": {
     name: "Overflew the Target!",
     condition: "Get 500 overflow letters.",
     reward: ""
 },
-"12": {
+"13": {
     name: "Double trouble",
     condition: "Master D",
     reward: ""
 },
-"13": {
+"14": {
     name: "But I rather not",
     condition: "Prestige without utilising double points upgrade.",
     reward: ""
 },
-"14": {
+"15": {
     name: "Screws!",
     condition: "Get 500 total screws.",
     reward: ""
 },
-"15": {
+"16": {
     name: "Papers Please",
     condition: "Get 1cm² of paper.",
     reward: ""
 },
-"16": {
+"17": {
     name: "Truly overflowing",
     condition: "Have 500 points.",
     reward: ""
 },
-"17": {
+"18": {
     name: "The First Challenge",
     condition: "Unlock CA10A.",
     reward: ""
 },
-"18": {
+"19": {
     name: "That wasn’t challenging…",
     condition: "Finish CA10A.",
     reward: ""
-}};
+}}
 
 // mastery
 const masteryMilestones = [50, 200, 500, 1000, 5000, 12000, 30000, 100000, 150000, 200000, 275000, 350000, 500000, 600000, 700000, 850000, 1000000];
@@ -140,15 +145,17 @@ masteryOrder.forEach(letter => droughtCounter[letter] = 0);
 const keyTimestamps = [];
 let lastKey = null;
 let keyHoldStart = null;
-let autoMonkeyInterval = 1;
+let baseInterval = 500;
+let autoMonkeyInterval = baseInterval;
 let currentPos = 0;
 let autoMonkeyIntervalTab = getID("automonkeyinterval");
 let intervalId = null;
 
 // achievements
-const achievements = [];
+let achievements = [];
 const achievementTab = getID("achievementTab");
 const achievementPopup = getID("achievement-popup");
+let screwA = false;
 
 // flags
 let canType = false;
@@ -201,7 +208,7 @@ function getLetterMultiplier(char) {
 function getTriplePressChance(char) {
     return Math.min(0.4, letterUpgrades[char].triplePressChance.level * 0.05);
 }
-    
+
 // tabs
 const buttons = document.querySelectorAll('.sidebarBtn');
 const contents = document.querySelectorAll('.tabContent');

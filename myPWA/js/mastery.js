@@ -37,7 +37,7 @@ function getTotalScrewsSpent() {
 }
 
 function updateAutoMonkeyInterval() {
-    const baseInterval = 500; // base interval in ms
+    const baseInterval = autoMonkeyInterval; // base interval in ms
     const totalSpent = getTotalScrewsSpent();
     autoMonkeyInterval = Math.max(1, baseInterval * Math.pow(0.9, totalSpent));
     const intervalDisplay = document.getElementById("auto-monkey-interval");
@@ -90,7 +90,7 @@ function updateMasteryUI() {
             <div>Screws: <span id="screws-${char}">0</span></div>
 
             <div class="lab-progress">
-                <div class="lab-bar" id="bar-${char}" style="width: 0%"></div>
+                <div class="masteryBar" id="bar-${char}" style="width: 0%"></div>
             </div>
 
             <button class="lab-btn buy-upgrade" data-char="${char}" data-type="letterMultiplier">
@@ -146,6 +146,14 @@ function updateMasteryProgress() {
         }
 
         const screws = getTotalScrews(count, char);
+        if (!screwA) {
+            if (char == "a") {
+                if (screws >= 1) {
+                    unlockAchievement("5");
+                    screwA = true;
+                }
+            }
+        }
         const multLevel = letterUpgrades[char].letterMultiplier.level;
         const tripleLevel = letterUpgrades[char].triplePressChance.level;
 
@@ -170,11 +178,11 @@ function updateMasteryProgress() {
 function respecUpgrades() {
     for (let char of masteryOrder) {
         if (char.length != 1) continue;
-        console.log(char);
         letterUpgrades[char].letterMultiplier.level = 0;
         letterUpgrades[char].triplePressChance.level = 0;
         spentScrews[char] = 0;
     }
+    autoMonkeyInterval = baseInterval;
     updateAutoMonkeyInterval();
     updateMasteryProgress();
     updateMasteryUI();

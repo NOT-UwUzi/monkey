@@ -20,3 +20,10 @@
     display: none;
     opacity: 0 !important;
 }
+
+/* achievements */
+
+.achievementImage.locked {
+    filter: grayscale(100%);
+    opacity: 0.4;
+}

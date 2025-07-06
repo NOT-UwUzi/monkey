@@ -70,7 +70,7 @@
   </div>
 
   <div class="tabContent" id="collection">
-    <p>Your collections will appear here.</p>
+    <p>Playtime: <span id="playtime">0s</span></p>
   </div>
 
   <div class="tabContent" id="settings">
@@ -141,18 +141,6 @@
 
       <button id="resetGame">Reset Game</button>
     </div>
-
-    <div id="resetModal" class="modal hidden">
-      <div class="modal-content">
-        <h3>Confirm Reset</h3>
-        <p>This will erase all progress. Type <b>RESET</b> below to confirm:</p>
-        <input type="text" id="resetInput" placeholder="Type RESET to confirm" />
-        <div class="modal-buttons">
-          <button id="cancelReset">Cancel</button>
-          <button id="confirmReset" disabled>Confirm</button>
-        </div>
-      </div>
-    </div>
   </div>
 
   <div class="tabContent" id="shop">
@@ -171,6 +159,7 @@
   <script src="js/keyboard.js"></script>
   <script src="js/functions.js"></script>
   <script src="js/mastery.js"></script>
+  <script src="js/collections.js"></script>
   <script src="js/typing.js"></script>
   <script src="js/chapters.js"></script>
   <script src="js/cheats.js"></script>

@@ -12,7 +12,7 @@ document.addEventListener("keydown", (e) => {
     if (!/^[a-zA-Z]$/.test(e.key)) return;
     if (!typedLetter) {
         typedLetter = true;
-        unlockAchievement("01");
+        unlockAchievement("1");
     }
     if (!resumedOnce) resumedOnce = true;
 
@@ -137,7 +137,7 @@ function showFloatingKey(forcedKey = null) {
     }
 
     if (masteredIndex == 0) {
-        if (weightValue[masteredIndex] >= 5) {
+        if (weightValue[masteredIndex] >= 3) {
             if (!canType) {
                 canType = true;
                 showPopup("feature", "Feature Unlocked: Monkey Control");
@@ -147,7 +147,7 @@ function showFloatingKey(forcedKey = null) {
         if (weightValue[masteredIndex] >= 10) {
             if (!chapterTabEnabled) {
                 chapterTabEnabled = true;
-                unlockTab("chapter", "Chapters", "book-open") //fix
+                unlockTab("chapter", "Chapters", "book-open");
             }
         }
     }
@@ -163,10 +163,13 @@ function showFloatingKey(forcedKey = null) {
             nextKeyDiv.style.opacity = "1";
             nextKeyDiv.style.filter = "";
         }
-        if (masteredIndex === 1) unlockAchievement("02");
+        if (masteredIndex === 1) unlockAchievement("2");
         if (masteredIndex === 1 && !masteryTabEnabled) unlockTab("mastery", "Masteries", "trophy");
+        if (masteredIndex === 3) unlockAchievement("6");
         if (masteredIndex === 2 && !collectionTabEnabled) unlockTab("collection", "Collections", "collection");
     }
+
+    if (masteryValue[0] >= 100) unlockAchievement("4");
 
     container.appendChild(span);
     setTimeout(() => span.remove(), 1000);

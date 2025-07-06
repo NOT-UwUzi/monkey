@@ -1,14 +1,38 @@
 // tab+feature+achievement unlocking
+function renderAllAchievements() {
+    const container = getID("achievementImages");
+    if (!container) {
+        console.error("Element with id 'achievementImages' not found in the DOM");
+        return;
+    }
+    container.innerHTML = "";
+
+    for (const id in achievementData) {
+        const { name, condition, reward } = achievementData[id];
+
+        const wrapper = document.createElement("div");
+        wrapper.classList.add("achievementWrapper");
+        wrapper.dataset.achievementId = id;
+
+        const img = document.createElement("img");
+        img.src = "monkey.webp";
+        img.className = "achievementImage locked";
+
+        const tooltip = document.createElement("div");
+        tooltip.className = "achievementTooltip";
+        tooltip.innerHTML = `<strong>${name}</strong><br>${condition}${reward ? `<br><em>Reward: ${reward}</em>` : ""}`;
+
+        wrapper.appendChild(img);
+        wrapper.appendChild(tooltip);
+        container.appendChild(wrapper);
+    }
+}
+
 function unlockAchievement(id) {
     if (achievements.includes(id)) return;
     achievements.push(id);
 
-    const { name, condition, reward } = achievementData[id] || {
-        name: "Unknown Achievement",
-        condition: "???",
-        reward: ""
-    };
-
+    const { name } = achievementData[id] || { name: "Unknown Achievement" };
     showPopup("achievement", name);
 
     const container = getID("achievementImages");
@@ -17,26 +41,30 @@ function unlockAchievement(id) {
         return;
     }
 
-    const wrapper = document.createElement("div");
-    wrapper.classList.add("achievementWrapper");
+    const wrapper = container.querySelector(`.achievementWrapper[data-achievement-id="${id}"]`);
+    if (!wrapper) {
+        console.warn(`Achievement wrapper for id ${id} not found, rendering all achievements again.`);
+        renderAllAchievements();
+        unlockAchievement(id);
+        return;
+    }
 
-    const img = document.createElement("img");
-    img.src = "monkey.webp";
-    img.className = "achievementImage";
-
-    const tooltip = document.createElement("div");
-    tooltip.className = "achievementTooltip";
-    tooltip.innerHTML = `<strong>${name}</strong><br>${condition}${reward ? `<br><em>${reward}</em>` : ""}`;
-
-    wrapper.appendChild(img);
-    wrapper.appendChild(tooltip);
-    container.appendChild(wrapper);
+    const img = wrapper.querySelector("img.achievementImage");
+    if (img) {
+        img.classList.remove("locked");
+    }
 
     if (!achievementTabEnabled) {
         achievementTabEnabled = true;
-        unlockTab("achievement", "Achievements", "award")
+        unlockTab("achievement", "Achievements", "award");
     }
+
+    if (id == "8") {updateAutoMonkeyInterval(); baseInterval *= 0.9;}
 }
+
+//
+
+renderAllAchievements();
 
 function showPopup(type, text, duration = 5000) {
     const container = getID("popups");
