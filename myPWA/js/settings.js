@@ -1,6 +1,12 @@
 // settings listener!!
 getID("autosaveToggle").addEventListener("change", (e) => {
     gameSettings.autosave = e.target.checked;
+    localStorage.setItem("gameSettings", JSON.stringify(gameSettings));
+    if (gameSettings.autosave) {
+        startAutoSave();
+    } else {
+        stopAutoSave();
+    }
 });
 
 getID("notationSelect").addEventListener("change", (e) => {
@@ -8,17 +14,62 @@ getID("notationSelect").addEventListener("change", (e) => {
     // updateNotationStyle();
 });
 
-// theme loading
-const savedTheme = localStorage.getItem("theme") || "light";
-document.body.classList.add(`theme-${savedTheme}`);
-getID("themeSelect").value = savedTheme;
+const themeToggle = getID("themeToggle");
+const themeSelect = getID("themeSelect");
 
-getID("themeSelect").addEventListener("change", (e) => {
-    const theme = e.target.value;
-    document.body.className = ""; // clear themes
+function setTheme(theme) {
+    document.body.className = "";
     document.body.classList.add(`theme-${theme}`);
     localStorage.setItem("theme", theme);
+    themeSelect.value = theme;
+    themeToggle.checked = (theme === "dark");
+}
+
+themeToggle.addEventListener("change", (e) => {
+    setTheme(e.target.checked ? "dark" : "light");
 });
+
+themeSelect.addEventListener("change", (e) => {
+    setTheme(e.target.value);
+});
+
+const savedTheme = localStorage.getItem("theme") || "light";
+setTheme(savedTheme);
+
+// autosave
+let gameSettings = JSON.parse(localStorage.getItem("gameSettings")) || { autosave: true, notation: "default" };
+
+const AUTO_SAVE_INTERVAL = 500;
+let autosaveIntervalID = null;
+
+function autoSaveGame() {
+    const saveString = getEncryptedSaveData();
+    localStorage.setItem("autoSave", saveString);
+    console.log("Game auto-saved");
+}
+
+function startAutoSave() {
+    if (autosaveIntervalID === null) {
+        autosaveIntervalID = setInterval(autoSaveGame, AUTO_SAVE_INTERVAL);
+        console.log("Autosave started");
+    }
+}
+
+function stopAutoSave() {
+    if (autosaveIntervalID !== null) {
+        clearInterval(autosaveIntervalID);
+        autosaveIntervalID = null;
+        console.log("Autosave stopped");
+    }
+}
+
+getID("autosaveToggle").checked = gameSettings.autosave;
+
+if (gameSettings.autosave) {
+    startAutoSave();
+} else {
+    stopAutoSave();
+}
 
 // save encryption
 function getEncryptedSaveData() {
@@ -36,7 +87,8 @@ function getEncryptedSaveData() {
         collectionTabEnabled,
         masteryTabEnabled,
         chapterTabEnabled,
-        canType
+        canType,
+        currentPos
     };
 
     let json = JSON.stringify(saveData);
@@ -145,7 +197,6 @@ function loadGame(save) {
         }
     }
 
-
     chapter = save.chapter ?? 1;
     if (chapterDisplay) chapterDisplay.textContent = `Chapter ${chapter}`;
 
@@ -173,18 +224,10 @@ function loadGame(save) {
     if (chapterTabEnabled) unlockTab("chapter", "Chapters", "book-open");
     if (canType) showPopup("feature", "Feature Unlocked: Monkey Control");
 
+    currentPos = save.currentPos ?? currentPos;
+
     updateMasteryUI();
     updateMasteryProgress();
-}
-
-// auto save + sync
-const AUTO_SAVE_INTERVAL = 500;
-let autosaveIntervalID = setInterval(autoSaveGame, AUTO_SAVE_INTERVAL);
-
-function autoSaveGame() {
-    const saveString = getEncryptedSaveData();
-    localStorage.setItem("autoSave", saveString);
-    console.log("Game auto-saved");
 }
 
 function loadFromAutoSave() {
@@ -197,22 +240,18 @@ function loadFromAutoSave() {
         const decoded = JSON.parse(json);
 
         loadGame(decoded);
-        console.log("Game synced from autosave");
+        console.log("Game loaded from autosave");
     } catch (e) {
         console.error("Failed to load autosave:", e);
     }
 }
 
-window.addEventListener("storage", (event) => {
-    if (event.key === "autoSave" && event.newValue) {
-        loadFromAutoSave();
-    }
-});
-
 window.addEventListener("load", () => {
     loadFromAutoSave();
-    startAutoMonkey();
-    renderKeyboard();
-    attachCustomKeyboardTooltips();
-    updateMasteryUI();
+
+    if (gameSettings.autosave) {
+        startAutoSave();
+    } else {
+        stopAutoSave();
+    }
 });

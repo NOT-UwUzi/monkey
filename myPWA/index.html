@@ -45,12 +45,16 @@
     <div class="keyboard" id="keyboard"></div>
     <div id="currently-mastering"></div>
     <div id="automonkeyinterval"></div>
-    <p>hi!</p>
-    <img src="monkey.webp" style="width: 20%;">
+    <!-- <p>hi!</p>
+    <img src="monkey.webp" style="width: 20%;"> -->
   </div>
 
   <div class="tabContent" id="chapter">
-    <div id="chapter-paragraph" class="chapterParagraph"></div>
+    <div id="chapter-nav">
+      <button id="prevChapter" disabled>Previous Chapter</button>
+      <button id="nextChapter" disabled>Next Chapter</button>
+    </div>
+    <div id="chapter-paragraph"></div>
     <div id="current-chapter"></div>
     <div id="key-float-container-chapter"></div>
   </div>
@@ -145,23 +149,20 @@
 
   <div class="tabContent" id="shop">
     <p>
-    Banana: 2x boost to automonkey speed! Cost: $50 USD
+    Banana: 2x boost to automonkey speed! Cost: $5 USD (Not implemented, just to demonstrate the Financial Limitation)
     </p>
-    <span>
-    Hercules Chen: 50x boost to brainpower! Allows full control over monkey! Cost: Human organs.
-    </span>
   </div>
 
   <div id="popups" class="banner-container"></div>
 
   <script src="js/main.js"></script>
-  <script src="js/sidebar.js"></script>
   <script src="js/keyboard.js"></script>
   <script src="js/functions.js"></script>
   <script src="js/mastery.js"></script>
   <script src="js/collections.js"></script>
   <script src="js/typing.js"></script>
   <script src="js/chapters.js"></script>
+  <script src="js/sidebar.js"></script>
   <script src="js/cheats.js"></script>
   <script src="js/settings.js"></script>
 </body>

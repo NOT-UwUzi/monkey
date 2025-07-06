@@ -1,17 +1,87 @@
-.chapterParagraph {
-    margin: 20px;
+#chapter-paragraph {
+  width: 600px;
+  min-height: 400px;
+  margin: 40px auto;
+  padding: 40px 50px;
+  border-radius: 15px;
+  font-family: "Georgia", serif;
+  font-size: 20px;
+  line-height: 1.7;
+  color: #222;
+  position: relative;
+  box-sizing: border-box;
+  user-select: none;
+  border: 1px solid #ddd;
+  background: #fefefe url('https://www.transparenttextures.com/patterns/paper-fibers.png');
 }
 
-#key-float-container-chapter {
-    position: absolute;
-    bottom: 50%;
-    right: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-    z-index: 5000;
+.gray {
+  color: #aaa;
+}
+
+.black {
+  color: #222;
 }
 
 .caret {
-    color: black;
-    animation: blink 1s step-end infinite;
+  display: inline-block;
+  width: 2px;
+  height: 1.2em;
+  /* background: black; */
+  animation: blink 1s steps(2, start) infinite;
+  vertical-align: top;
+  /* margin-left: 2px; */
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
+}
+
+#current-chapter {
+  text-align: center;
+  font-weight: bold;
+  margin-top: 20px;
+  font-family: "Georgia", serif;
+  color: #555;
+  font-size: 18px;
+}
+
+#key-float-container-chapter {
+  position: absolute;
+  bottom: 50%;
+  right: 50%;
+  transform: translate(50%, 50%);
+  pointer-events: none;
+  z-index: 5000;
+}
+
+/* Chapter navigation buttons container */
+#chapter-nav {
+  width: 600px;
+  margin: 0 auto 30px auto;
+  text-align: center;
+}
+
+#chapter-nav button {
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  color: #555;
+  font-family: "Georgia", serif;
+  font-size: 16px;
+  padding: 8px 20px;
+  margin: 0 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#chapter-nav button:hover:not(:disabled) {
+  background-color: #ddd;
+}
+
+#chapter-nav button:disabled {
+  color: #aaa;
+  cursor: default;
+  background-color: #f9f9f9;
 }

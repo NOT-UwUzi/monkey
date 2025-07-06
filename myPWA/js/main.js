@@ -102,6 +102,11 @@ const achievementData = {
     name: "That wasn’t challenging…",
     condition: "Finish CA10A.",
     reward: ""
+},
+"20": {
+    name: "Is it over?",
+    condition: "Beat the game.",
+    reward: ""
 }}
 
 // mastery
@@ -156,6 +161,7 @@ let achievements = [];
 const achievementTab = getID("achievementTab");
 const achievementPopup = getID("achievement-popup");
 let screwA = false;
+let chapter1 = false;
 
 // flags
 let canType = false;
@@ -171,6 +177,7 @@ let typedLetter = false;
 
 // chapter letter tracking
 let chapter = 1;
+let maxUnlockedChapter = 1;
 let chapters = ["aaaaaa aaaaaa aaaaaaaa", "aeeae eaea iiaieaeae", "aeiaeiaeio eaeiaeiaoei aoeiea"];
 let chapterPage = getID("chapter-paragraph");
 let chapterDisplay = getID("current-chapter");

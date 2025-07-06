@@ -71,11 +71,8 @@ function showFloatingKeyChapter () {
     span.textContent = selectedChar;
     span.style.color = "#000";
     currentPos++;
-    if (currentPos >= currentChapter.length-1) {
-        chapter++;
-        currentPos = 0;
-        if (chapter == 2) unlockAchievement("3")
-    }
+    if (currentPos >= currentChapter.length-1) {chapter++; currentPos = 0;}
+    if (chapter >= 2 && !chapter1) {chapter1 = true; unlockAchievement("3");}
     displayChapterContent(currentPos)
 
     container.appendChild(span);
@@ -103,7 +100,7 @@ function displayChapterContent(currentPos) {
     if (!caretInserted) result += `<span class="caret">|</span>`;
 
     chapterPage.innerHTML = result;
-    chapterDisplay.innerHTML = "Current Chapter: " + chapter;
+    chapterDisplay.innerHTML = "Current Chapter:" + chapter;
 }
 
 function getChapterContent() {
