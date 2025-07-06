@@ -14,7 +14,6 @@ getID("notationSelect").addEventListener("change", (e) => {
     // updateNotationStyle();
 });
 
-const themeToggle = getID("themeToggle");
 const themeSelect = getID("themeSelect");
 
 function setTheme(theme) {
@@ -22,12 +21,7 @@ function setTheme(theme) {
     document.body.classList.add(`theme-${theme}`);
     localStorage.setItem("theme", theme);
     themeSelect.value = theme;
-    themeToggle.checked = (theme === "dark");
 }
-
-themeToggle.addEventListener("change", (e) => {
-    setTheme(e.target.checked ? "dark" : "light");
-});
 
 themeSelect.addEventListener("change", (e) => {
     setTheme(e.target.value);

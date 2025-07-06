@@ -1,30 +1,103 @@
-#settings {
-    padding: 15px;
+#settings.tabContent {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 equal columns */
+    grid-template-rows: repeat(2, auto);   /* 2 rows, height auto */
+    gap: 12px;
+    justify-items: stretch; /* make children fill cell width */
+    background: #f9f9f9;
+    color: #222;
     font-size: 14px;
 }
 
+/* Each block */
 .settings-section {
-    margin-bottom: 20px;
-    padding: 10px;
-    background: rgba(240, 240, 240, 0.6);
-    border-radius: 8px;
+    background: #fff;       /* white background */
+    border: 1px solid #ccc; /* lighter border */
+    border-radius: 6px;
+    width: 100%;
+    padding: 15px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 6px;
+    transition: all 0.2s ease;
 }
 
+.settings-section:hover {
+    background: #f0f0f0; /* subtle light gray hover */
+}
+
+/* Section header */
 .settings-section h3 {
-    margin-top: 0;
-    font-size: 16px;
-    border-bottom: 1px solid #ccc;
+    font-size: 15px;
+    font-weight: 600;
+    border-bottom: 1px solid #ddd; /* light border */
     padding-bottom: 4px;
-    margin-bottom: 8px;
+    margin: 0 0 8px 0;
+    color: #111; /* darker header text */
 }
 
+/* Label and input styles */
+.settings-section label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #444; /* medium dark text */
+}
+
+.settings-section input[type="checkbox"] {
+    transform: scale(1.2);
+}
+
+/* Dropdowns */
+.settings-section select {
+    width: 100%;
+    padding: 6px 8px;
+    font-size: 13px;
+    background: #fff; /* white background */
+    color: #222;      /* dark text */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Buttons */
+.settings-section button {
+    padding: 6px 10px;
+    font-size: 13px;
+    background: #fff;
+    color: #222;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.settings-section button:hover {
+    background: #e6e6e6; /* light hover */
+}
+
+/* Special buttons like reset */
+#resetGame {
+    background: #d9534f; /* bootstrap red */
+    color: white;
+    border: 1px solid #b52b27;
+}
+
+#resetGame:hover {
+    background: #c9302c;
+}
+
+/* Modal styles retained */
 .modal {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.6);
+    background: rgba(255, 255, 255, 0.9); /* light overlay */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -36,19 +109,23 @@
 }
 
 .modal-content {
-    background: white;
+    background: #fff;
+    color: #222;
     padding: 20px;
     border-radius: 10px;
-    width: 300px;
+    width: 320px;
     text-align: center;
-    box-shadow: 0 0 10px rgba(0,0,0,0.4);
+    border: 1px solid #ccc;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
 }
 
 .modal-content input {
     width: 100%;
     padding: 8px;
     margin: 10px 0;
-    border: 1px solid #aaa;
+    background: #fff;
+    border: 1px solid #ccc;
+    color: #222;
     border-radius: 5px;
 }
 
@@ -64,14 +141,17 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    background: #e6e6e6;
+    color: #222;
 }
 
 #confirmReset:disabled {
     background: #ccc;
+    color: #888;
     cursor: not-allowed;
 }
 
 #confirmReset:enabled {
-    background: red;
+    background: #d9534f;
     color: white;
 }
